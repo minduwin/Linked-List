@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+        class LinkedList {
+            constructor() {
+                this.head = null; // First element of the list
+                this.tail = null; // Last element of the list
+            }
+
+            append(prop) {
+                const newNode = { value: prop, next: null };
+
+                // We go to the previous last element - 'our tail' - and update the next value on the 
+                // tail and make sure that the next value of our previous tail node now points to this
+                // new node
+                if (this.tail) {
+                    this.tail.next = newNode;
+                }
+                // Once we updated the next property of our old tail we can overide the tail property of
+                // this constructor with our new node
+                this.tail = newNode;
+                if(!this.head) {
+                    this.head = newNode;
+                }
+            }
+
+            // Different from append() that insert elements at the end of the list, prepend() will add
+            // elements in the beginning of the list - so the next property needs to be treated differently
+            prepend(prop) {
+                const newNode = { value: prop, next: this.head }
+
+                this.head= newNode;
+                // Check if it's not an empty list - if so, tail will be updated too.
+                if (!this.tail) {
+                    this.tail = newNode;
+                }
+            }
+
+            // Return the size of the list
+            size() {
+                let node = this.head;
+                let count = 0;
+                while (node) {
+                    count++;
+                    node = node.next;
+                }
+
+                return `List size: ${count}`;
+            }
+
+            // Return the head
+            findHead() {
+                let node = this.head;
+
+                return `Head of the list: ${node.value}`;
+            }
+
+            // Return the tail
+            findTail() {
+                let node = this.tail;
+
+                return `Tail of the list: ${node.value}`;
+            }
+
+            // Return the node at the given index
+            indexAt(prop) {
+                let index = 0;
+                let node = this.head;
+
+                while (node) {
+                    if(node.value === prop) {
+                        return index;
+                    }
+
+                    index++;
+                    node = node.next;
+                }
+
+                return null;
+            }
+
+            // Removes de last element
+            pop() {
+
+                if(!this.head) {
+                    return null;
+                }
+
+                let temp = this.head;
+                let prev = this.head;
+
+                while(temp.next) {
+                    prev = temp;
+                    temp = prev.next;
+                }
+
+                this.tail = prev;
+                this.tail.next = null;
+                this.length--;
+
+                if(this.length === 0) {
+                    this.head = null;
+                    this.tail = null;
+                }
+
+                return temp;
+
+            }
+
+
+            // Search for a given element and return true or false
+            contains(prop) {
+                if(!this.head) {
+                    return 'Empty list';
+                }
+
+                // Loop start at the head...
+                let currentNod = this.head;
+
+                // ...and while there's nodes, we compare to the argument passed in
+                while (currentNod) {
+                    if (currentNod.value === prop) {
+                        return true;
+                    }
+                    currentNod = currentNod.next;
+                }
+
+                // If there's no occurrence, return false
+                return false;
+            }
+
+            // Insert node at the given index
+            insert(prop, afterProp) {
+                const existing = this.find(afterProp);
+
+                if(existing) {
+                    const newNode = { value: prop, next: existing.next };
+                    existing.next = newNode;
+                }
+            }
+
+            // Find node
+            find(prop) {
+                // if empty list, return nothing
+                if(!this.head) {
+                    return 'Empty list';
+                }
+
+                // Loop start at the head...
+                let currentNod = this.head;
+
+                // ...and while there's nodes, we compare to the argument passed in
+                while (currentNod) {
+                    if (currentNod.value === prop) {
+                        return currentNod;
+                    }
+                    currentNod = currentNod.next;
+                }
+
+                // If there's no occurrence, return null
+                return null;
+            }
+
+            // To show the LinkedList, we'll transform to array
+            toArray() {
+                const elements = [];
+                
+                // We start at the 'head' and loop over the next properties, populating the new array
+                let currentNod = this.head;
+                while(currentNod) {
+                    elements.push(currentNod);
+                    currentNod = currentNod.next;
+                }
+
+                return elements;
+            }
+
+            toString() {
+                let node = this.head;
+
+                let string = '';
+
+                while(node) {
+                    string += `${node.value} -> `;
+                    node = node.next;
+                }
+
+                return string;
+            }
+        }
+
+        const lista = new LinkedList();
+
+        lista.append(1);
+        lista.append('Hello');
+        lista.append('Coder');
+        lista.append(true);
+        lista.append(3.14);
+
+        lista.prepend('Primeiro');
+
+        console.log(lista.toArray());
+
+        console.log(lista.find('Nope'));
+        console.log(lista.find('Coder'));
+
+        console.log(lista.size());
+        console.log(lista.findHead());
+        console.log(lista.findTail());
+
+        console.log(lista.indexAt('Coder'));
+        console.log(lista.indexAt(46));
+        
+        lista.pop();
+
+        console.log(lista.toArray());
+
+        console.log(lista.contains('DMX'));
+        console.log(lista.contains('Coder'));
+
+        console.log(lista.toString());
+
+    </script>
+</body>
+</html>
